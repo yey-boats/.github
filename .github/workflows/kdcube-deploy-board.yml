@@ -1,0 +1,155 @@
+name: KDCube Deploy Board
+
+on:
+  workflow_call:
+    inputs:
+      component:
+        description: Component to deploy
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_any: ${{ steps.detect.outputs.deploy_any }}
+      components: ${{ steps.detect.outputs.components }}
+      full_stack: ${{ steps.detect.outputs.full_stack }}
+      front_shell: ${{ steps.detect.outputs.front_shell }}
+      web_ui: ${{ steps.detect.outputs.web_ui }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: detect
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          FORCE_DEPLOY_COMPONENT: ${{ inputs.component || 'auto' }}
+        run: scripts/ci/detect-changed-components.sh
+
+  deploy:
+    needs: detect
+    if: needs.detect.outputs.deploy_any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      KDCUBE_CHANGED_COMPONENTS: ${{ needs.detect.outputs.components }}
+      TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
+      KDCUBE_AWS_ROLE_TO_ASSUME: ${{ vars.KDCUBE_AWS_ROLE_TO_ASSUME || secrets.KDCUBE_AWS_ROLE_TO_ASSUME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ vars.AWS_REGION || secrets.AWS_REGION || 'us-east-1' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Materialize deployment secrets
+        env:
+          KDCUBE_ENV_FILE: ${{ secrets.KDCUBE_ENV_FILE }}
+          KDCUBE_BOARD_ENV_FILE: ${{ secrets.KDCUBE_BOARD_ENV_FILE }}
+          KDCUBE_INGRESS_ENV_FILE: ${{ secrets.KDCUBE_INGRESS_ENV_FILE }}
+          KDCUBE_PROC_ENV_FILE: ${{ secrets.KDCUBE_PROC_ENV_FILE }}
+          KDCUBE_METRICS_ENV_FILE: ${{ secrets.KDCUBE_METRICS_ENV_FILE }}
+          KDCUBE_POSTGRES_SETUP_ENV_FILE: ${{ secrets.KDCUBE_POSTGRES_SETUP_ENV_FILE }}
+          KDCUBE_BUNDLE_ID: signalk@2026-06-05
+          KDCUBE_FEDERATED_TOKEN_SECRET: ${{ secrets.KDCUBE_FEDERATED_TOKEN_SECRET }}
+          KDCUBE_SESSION_TOKEN_SECRET: ${{ secrets.KDCUBE_SESSION_TOKEN_SECRET }}
+          KDCUBE_RECAPTCHA_SECRET: ${{ secrets.KDCUBE_RECAPTCHA_SECRET }}
+          KDCUBE_GOOGLE_CLIENT_ID: ${{ secrets.KDCUBE_GOOGLE_CLIENT_ID }}
+          KDCUBE_BOOTSTRAP_ADMINS: ${{ secrets.KDCUBE_BOOTSTRAP_ADMINS }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          OIDC_SERVICE_ADMIN_USERNAME: ${{ secrets.OIDC_SERVICE_ADMIN_USERNAME }}
+          OIDC_SERVICE_ADMIN_PASSWORD: ${{ secrets.OIDC_SERVICE_ADMIN_PASSWORD }}
+          OIDC_SERVICE_ADMIN_EMAIL: ${{ secrets.OIDC_SERVICE_ADMIN_EMAIL }}
+          KDCUBE_RUNTIME_AWS_SECRET_ACCESS_KEY: ${{ secrets.KDCUBE_RUNTIME_AWS_SECRET_ACCESS_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+          HUGGINGFACE_API_TOKEN: ${{ secrets.HUGGINGFACE_API_TOKEN }}
+          KDCUBE_GIT_TOKEN: ${{ secrets.KDCUBE_GIT_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_WEBHOOK_SECRET: ${{ secrets.TELEGRAM_WEBHOOK_SECRET }}
+          INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
+          SIGNALK_USERNAME: ${{ secrets.SIGNALK_USERNAME }}
+          SIGNALK_PASSWORD: ${{ secrets.SIGNALK_PASSWORD }}
+          KDCUBE_IDP_USERS_JSON: ${{ secrets.KDCUBE_IDP_USERS_JSON }}
+          KDCUBE_FRONT_SHELL_CONFIG_JSON: ${{ secrets.KDCUBE_FRONT_SHELL_CONFIG_JSON }}
+          KDCUBE_FRONTEND_CONFIG_JSON: ${{ secrets.KDCUBE_FRONTEND_CONFIG_JSON }}
+          KDCUBE_GATEWAY_YAML: ${{ secrets.KDCUBE_GATEWAY_YAML }}
+          KDCUBE_ASSEMBLY_YAML: ${{ secrets.KDCUBE_ASSEMBLY_YAML }}
+          KDCUBE_BUNDLES_YAML: ${{ secrets.KDCUBE_BUNDLES_YAML }}
+          KDCUBE_REBOOT_SHIM_LUA: ${{ secrets.KDCUBE_REBOOT_SHIM_LUA }}
+          KDCUBE_NGINX_REBOOT_SHIM_CONF: ${{ secrets.KDCUBE_NGINX_REBOOT_SHIM_CONF }}
+          KDCUBE_NGINX_REBOOT_SHIM_HTTP_CONF: ${{ secrets.KDCUBE_NGINX_REBOOT_SHIM_HTTP_CONF }}
+        run: scripts/ci/materialize-github-secrets.sh
+
+      - name: Configure SSH
+        env:
+          BOARD_SSH_PRIVATE_KEY: ${{ secrets.BOARD_SSH_PRIVATE_KEY }}
+          BOARD_KNOWN_HOSTS: ${{ secrets.BOARD_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          test -n "${BOARD_SSH_PRIVATE_KEY}" || { echo "BOARD_SSH_PRIVATE_KEY secret is required" >&2; exit 1; }
+          mkdir -p ~/.ssh
+          printf '%s\n' "${BOARD_SSH_PRIVATE_KEY}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          if [ -n "${BOARD_KNOWN_HOSTS}" ]; then
+            printf '%s\n' "${BOARD_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          else
+            touch ~/.ssh/known_hosts
+          fi
+          chmod 600 ~/.ssh/known_hosts
+          printf '%s\n' \
+            'Host *' \
+            '  IdentityFile ~/.ssh/id_ed25519' \
+            '  IdentitiesOnly yes' \
+            '  StrictHostKeyChecking accept-new' \
+            > ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Join Tailscale
+        if: env.TAILSCALE_AUTHKEY != ''
+        uses: tailscale/github-action@v3
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Configure AWS credentials with OIDC
+        if: env.KDCUBE_AWS_ROLE_TO_ASSUME != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.KDCUBE_AWS_ROLE_TO_ASSUME }}
+          role-session-name: kdcube-github-actions-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure AWS credentials with static keys
+        if: env.KDCUBE_AWS_ROLE_TO_ASSUME == '' && env.AWS_ACCESS_KEY_ID != '' && env.AWS_SECRET_ACCESS_KEY != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up QEMU
+        if: needs.detect.outputs.full_stack == '1' || needs.detect.outputs.front_shell == '1' || needs.detect.outputs.web_ui == '1'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Set up Docker Buildx
+        if: needs.detect.outputs.full_stack == '1' || needs.detect.outputs.front_shell == '1' || needs.detect.outputs.web_ui == '1'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Deploy changed components
+        run: scripts/ci/deploy-changed-components.sh
