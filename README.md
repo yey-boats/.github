@@ -45,6 +45,10 @@ Adriatic sailing data so none of it needs a wet boat to develop against.
 | 🛠️ **[Instruments-manager](https://github.com/yey-boats/instruments-manager)** | SignalK server plugin + webapp to discover, register, configure, and OTA-update every display on the boat. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/instruments-manager?label=) |
 | 🌊 **[simulator](https://github.com/yey-boats/simulator)** | Physics-accurate Adriatic sailing simulator (Beneteau Oceanis 45) with pluggable SignalK / stdout / NMEA sinks. | Python | ![last](https://img.shields.io/github/last-commit/yey-boats/simulator?label=) |
 
+> `navigator-tg-bot` (private, a Telegram demo bot) and `.github` (this repo, org infra) are two
+> more repos in scope for org automation — see the triage playbook — but are excluded from the
+> public roster above.
+
 ---
 
 ## By the numbers
