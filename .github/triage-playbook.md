@@ -13,9 +13,12 @@ Steps 0–4 in order. GitHub state (labels, comments, PRs) is the only record.
 `.github` (org-github).
 
 ## Access rules (hard)
-- Use the **built-in GitHub tools** for: list/read issues, post comments,
-  add/remove labels, open/update PRs, fetch diffs. Do **not** rely on `gh`.
-- Use `git` for branches/commits/pushes; auth is handled by the proxy.
+- Use **Claude's native GitHub integration** (the built-in GitHub connector /
+  tools) for: list/read issues and comments, create/edit labels, add/remove
+  labels, open/update PRs, and fetch diffs.
+- Do **not** use the `gh` CLI, and do not install it — even if a `gh` binary is
+  present and authenticated, use the native integration instead. No exceptions.
+- Use `git` only for branches/commits/pushes; auth is handled by the proxy.
 - Only push branches named `claude/...`. Never merge, force-push, or close a
   human's issue.
 - Respect each repo's own `CLAUDE.md` / `AGENTS.md`.
