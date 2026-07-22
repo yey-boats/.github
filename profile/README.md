@@ -28,7 +28,7 @@ of dedicated chartplotters.
 data on a Sunton ESP32-4848S040, and grew into a small ecosystem around one idea:
 
 > **Describe a boat dashboard once, know it will work on the target *before* you send it,
-> and render it on the instrument, in the browser, and (soon) on phones and watches.**
+> and render it on the instrument, in the browser, and (in the future) on phones and watches.**
 
 That idea is now four cooperating projects — a **language** for dashboards, the **firmware**
 that draws them, a **manager plugin** that flashes and configures every display on the boat
