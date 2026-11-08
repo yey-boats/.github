@@ -17,6 +17,17 @@ authored once, validated against the hardware, and rendered everywhere.*
 
 ---
 
+### 🎬 Connect your boat in 5 minutes
+
+[![Watch: connect a SignalK boat to yey.boats and chat about it](https://yey.boats/media/yey-onboarding.jpg)](https://yey.boats/setup#video)
+
+Add a boat on [yey.boats](https://yey.boats), install the
+[SignalK connector](https://github.com/yey-boats/signalk-yey-connector), paste the link, approve
+what it shares, and chat about your own boat. Narrated walkthrough with captions:
+[watch on yey.boats](https://yey.boats/setup#video) · [MP4](https://yey.boats/media/yey-onboarding.mp4)
+
+---
+
 ## The story
 
 Marine multi-function displays are expensive, closed, and frozen: the screens are
