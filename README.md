@@ -5,9 +5,9 @@
 
 ### Open marine instrumentation for the rest of us
 
-*A source-available stack that turns cheap ESP32 touch panels into a SignalK glass cockpit —
-authored once, validated against the hardware, and rendered everywhere — plus an on-board
-navigator that thinks locally and reaches the cloud only when it helps.*
+*A source-available stack around [SignalK](https://signalk.org): cheap ESP32 glass-cockpit
+displays on board, a navigator you can chat with about your own boat at
+[yey.boats](https://yey.boats), and an optional YEY box that keeps it all working offline.*
 
 [![License: PolyForm-NC-1.0.0](https://img.shields.io/badge/license-PolyForm--NC--1.0.0-yellow.svg)](https://polyformproject.org/licenses/noncommercial/1.0.0/)
 [![SignalK](https://img.shields.io/badge/SignalK-native-1eb2a8.svg)](https://signalk.org)
@@ -47,11 +47,11 @@ that draws them, a **manager plugin** that flashes and configures every display 
 from the SignalK console, and a **physics simulator** that feeds the whole thing realistic
 Adriatic sailing data so none of it needs a wet boat to develop against.
 
-Then the boat got a brain. The **YEY box** is a small i.MX-based computer that runs SignalK,
-the instruments stack and a **local language model** on board, so the crew can ask *"how deep
-is it here?"* with no signal at all. When it helps, the box **delegates** to the
-[yey.boats](https://yey.boats) navigator in the cloud over a signed, outbound-only link — and
-nothing crosses that link without the owner's consent.
+Then the boat got connected. Any SignalK boat can now link to the **yey.boats navigator** —
+ask about your boat on Telegram, the web or Claude, get alerts, and (only if you allow it)
+steer the autopilot remotely. And a **YEY box** can come aboard: a small i.MX computer that
+*is* the boat's SignalK server, runs the navigator locally with an **on-board language
+model**, and uses the cloud only when it is reachable.
 
 ---
 
@@ -63,17 +63,11 @@ nothing crosses that link without the owner's consent.
 | 📐 **[midl](https://github.com/yey-boats/midl)** | **M**arine **I**nstrument **D**efinition **L**anguage — declarative JSON/YAML dashboards, validated against each device's capability manifest. | TypeScript | ![last](https://img.shields.io/github/last-commit/yey-boats/midl?label=) |
 | 🛠️ **[Instruments-manager](https://github.com/yey-boats/instruments-manager)** | SignalK server plugin + webapp to discover, register, configure, and OTA-update every display on the boat. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/instruments-manager?label=) |
 | 🌊 **[simulator](https://github.com/yey-boats/simulator)** | Physics-accurate Adriatic sailing simulator (Beneteau Oceanis 45) with pluggable SignalK / stdout / NMEA sinks. | Python | ![last](https://img.shields.io/github/last-commit/yey-boats/simulator?label=) |
-| 🔗 **[signalk-yey-connector](https://github.com/yey-boats/signalk-yey-connector)** | SignalK plugin: plan-driven, outbound-only uplink from any SignalK boat to yey.boats. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/signalk-yey-connector?label=) |
+| 🔗 **[signalk-yey-connector](https://github.com/yey-boats/signalk-yey-connector)** | SignalK plugin that links a boat to yey.boats: consent-first pairing, outbound-only uplink of the paths you share, remote requests, and a two-switch gate for remote steering. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/signalk-yey-connector?label=) |
 
-### Behind the curtain (private for now)
-
-| Piece | What it is |
-|---|---|
-| 📦 **YEY box** | Yocto image for Compulab UCM-iMX95 (6× A55 + NPU) and cheaper i.MX8M Plus gateways: A/B updates, signed images and model sets, firewall zones, a local portal, and the whole stack in containers. Works offline from the first boot. |
-| 🧠 **Local model** | The on-board navigator: a tiny encoder router, deterministic sensor findings, and a 1–2 B model distilled from much larger local teachers. Plus `yey-router`, a 4 B local stand-in for the cloud's quick-lane router, built from the production prompt. |
-| 🧭 **Navigator** | The yey.boats cloud assistant (KDCube): web and Telegram chat, the box link, crew alerts, and a `nav` service Claude can call on your behalf. |
-| 🗺️ **Locality** | Deterministic *"where is this"* for boats from open data: nearest toponyms, lights, harbours, AIS closest approach, laylines. Not for navigation. |
-| 📚 **Nautical terms** | Sailing facts, rules and multilingual sailor slang the models are checked against. |
+Private for now: the **navigator** (the yey.boats cloud bot), **board-imx95** (the YEY box
+image), **local-llm** (the on-board model), and the open-data **locality** and **nautical
+terms** packs the navigator draws on.
 
 ---
 
@@ -100,7 +94,7 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ## How the pieces fit
 
-**On the boat** — displays, data and the box:
+### On board: displays and SignalK
 
 ```
         author a dashboard                  develop without a boat
@@ -123,34 +117,50 @@ protocol (SignalK) and one dashboard format (MIDL).
         └────────────────────────────────────────────────┘
 ```
 
-**Local first, cloud when it helps** — the box and yey.boats:
+### Boat ↔ cloud: two ways aboard
 
 ```
-   crew question                                  ┌────────────────────────────┐
-        │                                         │        yey.boats           │
-        ▼                                         │   navigator (KDCube)       │
- ┌─────────────────── YEY box ───────────────┐    │   web · Telegram · Claude  │
- │ router ─► live readings + findings ─► LLM │    │   alerts to owner + crew   │
- │  (ms)     (alarms, trends, contradictions)│    └─────────────▲──────────────┘
- │                     local, offline answer │                  │
- │  SignalK · instruments · portal · alarms  │ ── signed link ──┘
- └───────────────────────────────────────────┘    outbound only
+   ESP32 displays ──┐                         ESP32 displays ──┐
+                    ▼                                          ▼
+ ┌─ your boat ────────────────┐        ┌─ YEY box (i.MX) ─────────────────────────┐
+ │ SignalK server             │        │ SignalK server (CAN/N2K, GNSS, serial)   │
+ │  + signalk-yey-connector   │        │  + manager + connector + BLE             │
+ └──────────┬─────────────────┘        │ navigator, local copy (web /my, own bot) │
+            │                          │  ├─ local: router → findings → small LLM │
+            │                          │  └─ online: cloud models, signed proxy   │
+            │                          │ settings + alerts link (yey.box.*)       │
+            │                          └──────────┬───────────────────────────────┘
+            │  outbound only, consent first       │  box-signed, outbound only
+            ▼                                     ▼
+ ┌─ yey.boats ──────────────────────────────────────────────────────────────────┐
+ │ navigator: boats, consent, data plans, history, alerts, remote requests      │
+ │ surfaces:  Telegram bot · web chat · Claude ("Boat tools" connector)         │
+ └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Local first.** The router picks the readings a question needs, deterministic code
-  computes the findings (alarms, sensor contradictions, trends), and a small distilled
-  model words the answer — on the UCM-iMX95's CPU, no connectivity required (the i.MX8M Plus
-  gateways skip the local model and keep everything else). Alarms never wait
-  for a model.
-- **Delegation to the cloud.** Pairing is approved *at the box* (a match number shown on
-  yey.boats must be typed there), and data-sharing consent is recorded before the boat is
-  paired. The box holds its own key and mints short-lived tokens; it never stores a cloud
-  bearer. Over that link it reconciles settings, fans alerts out to owner and crew, and
-  answers the cloud's requests — but only for paths the owner shared, and steering only
-  while the on-board switch says so.
-- **Delegation from you.** Connect the yey.boats *Boat tools* connector in Claude and it can
-  ask your navigator, read your boat and (only if you tick that grant) control it — as you,
-  under your plan, with the same checks as the web chat.
+**A SignalK boat + the connector.** Pair from yey.boats with a one-time code, tick what you
+share, and the plugin opens one outbound connection — nothing listens on the boat. Only paths
+in both the plan and your consent go up (a local deny list always wins), buffered through
+outages. The navigator can read a shared path back on demand; writes are refused except
+autopilot commands, and those need the plugin's own switch **and** a confirmed opt-in on
+yey.boats, each command bound to this boat, short-lived, replay-protected and rate-limited.
+
+**The YEY box, when you have one.** The box *is* the boat's SignalK server, with every image
+on its factory partition so it boots the full stack with no internet. It runs its own copy of
+the navigator for this one boat, signed in locally:
+
+- **Online:** turns are shared between the cloud models (reached through a box-signed proxy,
+  or your own API key) and the on-board model.
+- **Offline:** everything is answered on board — a small router picks the readings a question
+  needs, deterministic code computes alarms, trends and sensor contradictions, and a distilled
+  model words the answer. Actions and a few intents always wait for the online path.
+- **Linked to yey.boats:** paired to your account with its own key, the box keeps settings in
+  sync and sends alarms (anchor drag, bilge, battery, MOB, depth, fire) to the owner and opted-in
+  crew on Telegram. Secrets, SSH, firewall and update signing can never be set from the cloud.
+
+**From Claude.** Connect the yey.boats *Boat tools* connector and Claude can ask your
+navigator and read your boat — and control it only if you tick that separate grant — as you,
+on your plan, with the same checks as the chat.
 
 ---
 
@@ -167,22 +177,6 @@ If you're an autonomous agent (or driving one): read the repo's `CLAUDE.md`,
 keep changes test-covered (`make test` / host unit tests are pure and fast),
 run the linters, and open a PR. Humans and agents are held to the same bar —
 green CI, clear commits, and changes validated against the hardware contract.
-
-### The lab behind it
-
-The models are built locally, not rented:
-
-- **Two NVIDIA DGX Spark workstations** run the big open models as *teachers* (to write
-  training answers), a *judge* from a different model family (to grade them), and batch
-  generation on vLLM. Students of 1–2 B parameters are distilled from that data, gated on a
-  held-out eval, quantised, and shipped to boxes as signed model sets.
-- **Real hardware in the loop.** A UCM-iMX95 sits on the lab network and runs the same
-  image the boats do, so every model is timed on the board before it ships.
-- **Work is delegated, too.** Long-running agent sessions own their own lane — board image,
-  model training, cloud navigator, lab housekeeping — with handover notes, explicit hand-offs
-  between lanes, and a second model reviewing pull requests before a human merges them.
-  A Prometheus/Grafana lab dashboard plus memory guards keep the night queues from starving
-  each other.
 
 **And input from people — real users on real boats — is appreciated even more.**
 You don't need to write a line of code to help: send us your **wishlists**,
