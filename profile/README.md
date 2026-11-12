@@ -41,10 +41,11 @@ data on a Sunton ESP32-4848S040, and grew into a small ecosystem around one idea
 > **Describe a boat dashboard once, know it will work on the target *before* you send it,
 > and render it on the instrument, in the browser, and (in the future) on phones and watches.**
 
-That idea is now four cooperating projects — a **language** for dashboards, the **firmware**
+That idea is now five cooperating projects — a **language** for dashboards, the **firmware**
 that draws them, a **manager plugin** that flashes and configures every display on the boat
-from the SignalK console, and a **physics simulator** that feeds the whole thing realistic
-Adriatic sailing data so none of it needs a wet boat to develop against.
+from the SignalK console, a **physics simulator** that feeds the whole thing realistic
+Adriatic sailing data so none of it needs a wet boat to develop against, and a **SignalK
+connector** that is the cloud product's entry point for a real boat.
 
 ---
 
@@ -56,10 +57,11 @@ Adriatic sailing data so none of it needs a wet boat to develop against.
 | 📐 **[midl](https://github.com/yey-boats/midl)** | **M**arine **I**nstrument **D**efinition **L**anguage — declarative JSON/YAML dashboards, validated against each device's capability manifest. | TypeScript | ![last](https://img.shields.io/github/last-commit/yey-boats/midl?label=) |
 | 🛠️ **[Instruments-manager](https://github.com/yey-boats/instruments-manager)** | SignalK server plugin + webapp to discover, register, configure, and OTA-update every display on the boat. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/instruments-manager?label=) |
 | 🌊 **[simulator](https://github.com/yey-boats/simulator)** | Physics-accurate Adriatic sailing simulator (Beneteau Oceanis 45) with pluggable SignalK / stdout / NMEA sinks. | Python | ![last](https://img.shields.io/github/last-commit/yey-boats/simulator?label=) |
+| 🔌 **[signalk-yey-connector](https://github.com/yey-boats/signalk-yey-connector)** | SignalK plugin: plan-driven, outbound-only uplink from a real boat to yey.boats — the cloud product's entry point. | JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/signalk-yey-connector?label=) |
 
-> `navigator-tg-bot` (private, a Telegram demo bot) and `.github` (this repo, org infra) are two
-> more repos in scope for org automation — see the triage playbook — but are excluded from the
-> public roster above.
+> `navigator` (private, a Telegram demo bot, formerly named `navigator-tg-bot`) and `.github`
+> (this repo, org infra) are two more repos in scope for org automation — see the triage
+> playbook — but are excluded from the public roster above.
 
 ---
 

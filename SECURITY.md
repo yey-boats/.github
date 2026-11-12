@@ -30,4 +30,4 @@ before any public disclosure.
 This policy applies to all repositories under the `yey-boats` GitHub organization, including
 firmware (`instruments`), the dashboard language (`midl`), the SignalK plugin
 (`Instruments-manager`), the simulator (`simulator`), and the private automation bot
-(`navigator-tg-bot`).
+(`navigator`, formerly named `navigator-tg-bot`).

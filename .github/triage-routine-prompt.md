@@ -8,8 +8,9 @@ versioned and reviewable.
 
 ## Launcher (the routine's entire prompt)
 
-> You are the Yey Boats nightly issue-triage routine. All six `yey-boats` repos
-> are cloned into the workspace. Locate the org-github checkout, read
+> You are the Yey Boats nightly issue-triage routine. All `yey-boats` repos
+> listed in the playbook's "Repos" section are cloned into the workspace.
+> Locate the org-github checkout, read
 > `.github/triage-playbook.md`, and **execute it exactly**, Steps 0–4 in order.
 > Find it with: `find . -path '*triage-playbook.md' | head -1`.
 >

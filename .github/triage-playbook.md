@@ -9,8 +9,9 @@ Steps 0–4 in order. GitHub state (labels, comments, PRs) is the only record.
   labels/comments, and skip ALL implement work (no branches, no PRs).
 
 ## Repos (all auto-cloned into the workspace)
-`midl`, `instruments`, `Instruments-manager`, `simulator`, `navigator-tg-bot`,
-`.github` (org-github).
+`midl`, `instruments`, `Instruments-manager`, `simulator`, `navigator`
+(renamed from `navigator-tg-bot`), `signalk-yey-connector`, `board-imx95`,
+`local-llm`, `locality`, `.github` (org-github).
 
 ## Access rules (hard)
 - Use **Claude's native GitHub integration** (the built-in GitHub connector /
@@ -78,8 +79,10 @@ If `IMPLEMENT_CAP == 0`, ALL IMPLEMENT issues are treated as queued (dry run).
    - `instruments`: `make test`
    - `Instruments-manager`: `npm test` then `npm run check`
    - `simulator`: `pytest` then `ruff check`
-   - `navigator-tg-bot`: `make test`
+   - `navigator`: `make test`
    - `.github`: none (docs only)
+   - any other repo (e.g. `signalk-yey-connector`, `board-imx95`, `local-llm`,
+     `locality`): no entry here yet — follow its own `CLAUDE.md`/`AGENTS.md`
 6. **If tests pass:** push the branch; open a **ready-for-review** PR titled
    `<type>: <summary> (Fixes #<n>)` with body = *Plan* + *What changed* +
    *How tested*, linking `Fixes #<n>`. Swap `auto:in-progress` → `auto:pr-open`.
