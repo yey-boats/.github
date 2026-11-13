@@ -46,8 +46,8 @@ that draws them, a **manager plugin** that flashes and configures every display 
 from the SignalK console, and a **physics simulator** that feeds the whole thing realistic
 Adriatic sailing data so none of it needs a wet boat to develop against.
 
-Then the boat got connected: the **yey.boats navigator** in the cloud, and an optional
-**YEY box** on board that keeps working offline.
+Then the boat got connected: the **yey.boats navigator** in the cloud, and the **YEY box**,
+one unit that replaces the usual Raspberry Pi + HATs SignalK server and keeps working offline.
 
 ---
 
@@ -92,16 +92,21 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ```mermaid
 flowchart LR
-  D[ESP32 displays] --> SK[SignalK on the boat]
-  SK -- connector --> Y[yey.boats navigator]
-  B[YEY box<br/>SignalK + local model] -. when online .-> Y
-  D --> B
+  E[Onboard equipment<br/>NMEA 2000 · NMEA 0183 · GNSS · BLE sensors] --> R
+  E --> B
+  subgraph boat[On the boat — pick one]
+    R[Raspberry Pi + HATs<br/>SignalK + connector]
+    B[YEY box<br/>SignalK + navigator + local model]
+  end
+  D[ESP32 displays] <--> boat
+  R --> Y[yey.boats navigator]
+  B -. when online .-> Y
   Y --> U[Telegram · web · Claude]
 ```
 
-- **Any SignalK boat** links to yey.boats with the connector plugin: you choose what to share, and it only connects outward.
-- **The yey.boats navigator** lets you chat about your boat, sends alerts, and steers only if you switch that on.
-- **A YEY box** is an optional onboard computer that runs SignalK and the navigator with a local model, so it keeps working offline and uses the cloud when it can reach it.
+- **SignalK is the hub.** It usually runs on a Raspberry Pi with HATs wired to the boat's equipment, and the connector plugin links it to yey.boats. You choose what to share, and the connection only goes outward.
+- **The YEY box replaces the Pi and its HATs.** It has NMEA 2000/CAN, serial, GNSS, Bluetooth, LAN and boat power built in. It runs SignalK and the navigator with a local model, so it keeps working offline and uses the cloud when it can reach it.
+- **The yey.boats navigator** lets you chat about your boat and sends alerts. It steers only if you switch that on.
 
 ---
 
