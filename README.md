@@ -100,7 +100,7 @@ protocol (SignalK) and one dashboard format (MIDL).
 ## From a Pi with HATs to one box
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg" width="880" alt="Today a SignalK boat needs 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box is 1 device with SignalK, the navigator, a local model and every interface built in.">
+  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg" width="880" alt="Today a SignalK boat needs 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box is 1 device with SignalK, the navigator, a local model and every interface built in. yey.boats: chat, alerts, remote control, fleet management, external AI ready.">
 </p>
 
 ---
