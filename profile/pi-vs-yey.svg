@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 404" width="880" height="404" role="img" aria-labelledby="t d">
+  <title id="t">From a Raspberry Pi with HATs to one YEY box</title>
+  <desc id="d">Today a SignalK boat needs three or more devices: a Raspberry Pi, a CAN / NMEA 2000 HAT, a GNSS / serial HAT and a power supply. The YEY box is one device with SignalK, the navigator, a local model and all interfaces built in. Both connect boat equipment to yey.boats; the box keeps working offline.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; }
+    .bar   { fill: #f6f8fa; stroke: #d0d7de; }
+    .panel { fill: none; stroke: #d0d7de; stroke-dasharray: 5 4; }
+    .dev   { fill: #ffffff; stroke: #8c959f; }
+    .pi    { fill: #eaeef2; stroke: #8c959f; }
+    .box   { fill: #ddf4ff; stroke: #0969da; stroke-width: 2; }
+    .line  { stroke: #8c959f; stroke-width: 1.5; fill: none; }
+    .acc   { stroke: #0969da; }
+    .head  { font-size: 15px; font-weight: 600; }
+    .lbl   { font-size: 14px; }
+    .sub   { font-size: 13px; fill: #59636e; }
+    .big   { font-size: 18px; font-weight: 700; fill: #0969da; }
+    .count { font-size: 15px; font-weight: 700; }
+    .tip   { fill: #8c959f; }
+    .tipa  { fill: #0969da; }
+    @media (prefers-color-scheme: dark) {
+      text { fill: #e6edf3; }
+      .bar   { fill: #161b22; stroke: #3d444d; }
+      .panel { stroke: #3d444d; }
+      .dev   { fill: #0d1117; stroke: #656c76; }
+      .pi    { fill: #212830; stroke: #656c76; }
+      .box   { fill: #0c2d6b; stroke: #4493f8; }
+      .line  { stroke: #656c76; }
+      .acc   { stroke: #4493f8; }
+      .sub   { fill: #9198a1; }
+      .big   { fill: #4493f8; }
+      .tip   { fill: #656c76; }
+      .tipa  { fill: #4493f8; }
+    }
+  </style>
+
+  <!-- boat equipment -->
+  <rect class="bar" x="40" y="16" width="800" height="48" rx="8"/>
+  <text class="head" x="440" y="45" text-anchor="middle">Boat equipment  ·  NMEA 2000  ·  NMEA 0183  ·  GNSS  ·  sensors</text>
+
+  <!-- arrows down -->
+  <path class="line" d="M230 64 V92"/><path class="tip" d="M224 90 L230 100 L236 90 Z"/>
+  <path class="line acc" d="M650 64 V92"/><path class="tipa" d="M644 90 L650 100 L656 90 Z"/>
+
+  <!-- left: today -->
+  <rect class="panel" x="40" y="104" width="380" height="208" rx="10"/>
+  <text class="count" x="60" y="132">Today</text>
+  <text class="sub" x="400" y="132" text-anchor="end">3+ devices</text>
+  <rect class="dev" x="80" y="148" width="300" height="32" rx="6"/>
+  <text class="lbl" x="230" y="169" text-anchor="middle">CAN / NMEA 2000 HAT</text>
+  <rect class="dev" x="80" y="188" width="300" height="32" rx="6"/>
+  <text class="lbl" x="230" y="209" text-anchor="middle">GNSS / serial HAT</text>
+  <rect class="dev" x="80" y="228" width="300" height="32" rx="6"/>
+  <text class="lbl" x="230" y="249" text-anchor="middle">Power supply</text>
+  <rect class="pi" x="80" y="268" width="300" height="32" rx="6"/>
+  <text class="lbl" x="230" y="289" text-anchor="middle">Raspberry Pi  ·  SignalK</text>
+
+  <!-- right: yey box -->
+  <rect class="panel" x="460" y="104" width="380" height="208" rx="10"/>
+  <text class="count" x="480" y="132">YEY box</text>
+  <text class="sub" x="820" y="132" text-anchor="end">1 device</text>
+  <rect class="box" x="500" y="148" width="300" height="152" rx="10"/>
+  <text class="big" x="650" y="196" text-anchor="middle">YEY box</text>
+  <text class="lbl" x="650" y="228" text-anchor="middle">SignalK  ·  navigator  ·  local model</text>
+  <text class="sub" x="650" y="256" text-anchor="middle">CAN  ·  serial  ·  GNSS  ·  BLE</text>
+  <text class="sub" x="650" y="278" text-anchor="middle">LAN  ·  power</text>
+
+  <!-- arrows down to cloud -->
+  <path class="line" d="M230 312 V340"/><path class="tip" d="M224 338 L230 348 L236 338 Z"/>
+  <path class="line acc" d="M650 312 V340" stroke-dasharray="4 4"/><path class="tipa" d="M644 338 L650 348 L656 338 Z"/>
+  <text class="sub" x="664" y="334">when online</text>
+
+  <!-- cloud -->
+  <rect class="bar" x="40" y="352" width="800" height="44" rx="8"/>
+  <text class="head" x="440" y="379" text-anchor="middle">yey.boats  ·  chat  ·  alerts</text>
+</svg>

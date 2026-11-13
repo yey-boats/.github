@@ -99,26 +99,9 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ## From a Pi with HATs to one box
 
-```mermaid
-flowchart LR
-  E[Boat equipment<br/>NMEA 2000 · NMEA 0183 · GNSS · sensors]
-
-  subgraph today[Today: 3+ devices]
-    direction TB
-    H1[CAN / NMEA 2000 HAT] --- PI[Raspberry Pi<br/>SignalK]
-    H2[GNSS / serial HAT] --- PI
-    PS[Power supply] --- PI
-  end
-
-  subgraph yey[YEY box: 1 device]
-    BOX[SignalK + navigator + local model<br/>CAN · serial · GNSS · BLE · LAN · power]
-  end
-
-  E --> today
-  E --> yey
-  today --> C[yey.boats<br/>chat · alerts]
-  yey -. works offline .-> C
-```
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg" width="880" alt="Today a SignalK boat needs 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box is 1 device with SignalK, the navigator, a local model and every interface built in.">
+</p>
 
 ---
 
