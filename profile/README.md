@@ -46,8 +46,9 @@ that draws them, a **manager plugin** that flashes and configures every display 
 from the SignalK console, and a **physics simulator** that feeds the whole thing realistic
 Adriatic sailing data so none of it needs a wet boat to develop against.
 
-Then the boat got connected: the **yey.boats navigator** in the cloud, and the **YEY box**,
-one unit that replaces the usual Raspberry Pi + HATs SignalK server and keeps working offline.
+Then the boat got connected. The **yey.boats navigator** lets you talk to your boat from
+anywhere, and the **YEY box** replaces the usual Raspberry Pi + HATs with one unit that
+keeps working offline.
 
 ---
 
@@ -88,25 +89,25 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ---
 
-## How the pieces fit
+## What you get
 
-```mermaid
-flowchart LR
-  E[Onboard equipment<br/>NMEA 2000 · NMEA 0183 · GNSS · BLE sensors] --> R
-  E --> B
-  subgraph boat[On the boat — pick one]
-    R[Raspberry Pi + HATs<br/>SignalK + connector]
-    B[YEY box<br/>SignalK + navigator + local model]
-  end
-  D[ESP32 displays] <--> boat
-  R --> Y[yey.boats navigator]
-  B -. when online .-> Y
-  Y --> U[Telegram · web · Claude]
-```
+- **Talk to your boat.** Ask *"how's the battery?"*, *"are we dragging?"* or *"who's that off the bow?"* on Telegram, the web or Claude, and get an answer from live data.
+- **Know when something's wrong.** Anchor drag, bilge, battery, depth and MOB alerts go to your phone and your crew.
+- **Keep it when the signal drops.** With a YEY box, the navigator runs on board on its own model.
+- **Your data stays yours.** You choose what leaves the boat, and nothing on board listens for incoming connections.
+- **$30 displays.** ESP32 panels show any SignalK data, laid out once in MIDL.
 
-- **SignalK is the hub.** It usually runs on a Raspberry Pi with HATs wired to the boat's equipment, and the connector plugin links it to yey.boats. You choose what to share, and the connection only goes outward.
-- **The YEY box replaces the Pi and its HATs.** It has NMEA 2000/CAN, serial, GNSS, Bluetooth, LAN and boat power built in. It runs SignalK and the navigator with a local model, so it keeps working offline and uses the cloud when it can reach it.
-- **The yey.boats navigator** lets you chat about your boat and sends alerts. It steers only if you switch that on.
+## From a Pi with HATs to one box
+
+Most SignalK boats today run on a Raspberry Pi with HATs and adapters wired to the equipment. The YEY box puts all of that in one unit.
+
+| | Raspberry Pi + HATs | YEY box |
+|---|---|---|
+| **Boat interfaces** | a CAN HAT, serial adapters, a GPS dongle and a separate supply | NMEA 2000/CAN, serial, GNSS, Bluetooth, LAN and boat power built in |
+| **Setup** | assemble, flash, then install SignalK and plugins | power it up; SignalK, plugins and the navigator come preinstalled |
+| **Without internet** | dashboards only | dashboards plus the navigator, on a local model |
+| **Updates** | by hand, on an SD card | signed A/B updates with rollback |
+| **yey.boats** | add the connector plugin | built in, paired with the box's own key |
 
 ---
 
