@@ -84,5 +84,5 @@
   <rect class="bar" x="40" y="352" width="800" height="92" rx="8"/>
   <text class="head" x="440" y="383" text-anchor="middle"><tspan class="key">Boat equipment</tspan><tspan dx="16">NMEA 2000  ·  NMEA 0183  ·  GNSS  ·  sensors  ·  autopilot</tspan></text>
   <path class="rule" d="M64 398 H816"/>
-  <text class="head" x="440" y="427" text-anchor="middle"><tspan class="key">YEY instruments</tspan><tspan dx="16">any ESP32 screen  ·  round remotes  ·  with a Pi or the YEY box</tspan></text>
+  <text class="head" x="440" y="427" text-anchor="middle"><tspan class="key">YEY instruments</tspan><tspan dx="16">any ESP32 screen  ·  round remotes</tspan></text>
 </svg>
