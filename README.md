@@ -47,8 +47,8 @@ from the SignalK console, and a **physics simulator** that feeds the whole thing
 Adriatic sailing data so none of it needs a wet boat to develop against.
 
 Then the boat got connected. The **yey.boats navigator** lets you talk to your boat from
-anywhere, and the **YEY box** replaces the usual Raspberry Pi + HATs with one unit that
-keeps working offline.
+anywhere, and the **YEY box** replaces the usual Raspberry Pi and its stack of HATs with a single
+device that keeps working offline.
 
 ---
 
@@ -99,11 +99,12 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ## From a Pi with HATs to one box
 
-Most SignalK boats today run on a Raspberry Pi with HATs and adapters wired to the equipment. The YEY box puts all of that in one unit.
+Most SignalK boats run on a Raspberry Pi plus HATs: at least three devices to buy, stack, power and wire. The YEY box is **one device**.
 
 | | Raspberry Pi + HATs | YEY box |
 |---|---|---|
-| **Boat interfaces** | a CAN HAT, serial adapters, a GPS dongle and a separate supply | NMEA 2000/CAN, serial, GNSS, Bluetooth, LAN and boat power built in |
+| **Devices** | **3 or more**: the Pi, a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply | **1** |
+| **Boat interfaces** | spread across the HATs and adapters | NMEA 2000/CAN, serial, GNSS, Bluetooth, LAN and boat power in one box |
 | **Setup** | assemble, flash, then install SignalK and plugins | power it up; SignalK, plugins and the navigator come preinstalled |
 | **Without internet** | dashboards only | dashboards plus the navigator, on a local model |
 | **Updates** | by hand, on an SD card | signed A/B updates with rollback |
