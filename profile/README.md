@@ -5,8 +5,8 @@
 
 ### Open marine instrumentation for the rest of us
 
-*A source-available stack that turns cheap ESP32 touch panels into a SignalK glass cockpit —
-authored once, validated against the hardware, and rendered everywhere.*
+*Cheap ESP32 glass-cockpit displays, a navigator you can chat with about your own boat,
+and an optional box that keeps it working offline — all on [SignalK](https://signalk.org).*
 
 [![License: PolyForm-NC-1.0.0](https://img.shields.io/badge/license-PolyForm--NC--1.0.0-yellow.svg)](https://polyformproject.org/licenses/noncommercial/1.0.0/)
 [![SignalK](https://img.shields.io/badge/SignalK-native-1eb2a8.svg)](https://signalk.org)
@@ -41,11 +41,14 @@ data on a Sunton ESP32-4848S040, and grew into a small ecosystem around one idea
 > **Describe a boat dashboard once, know it will work on the target *before* you send it,
 > and render it on the instrument, in the browser, and (in the future) on phones and watches.**
 
-That idea is now five cooperating projects — a **language** for dashboards, the **firmware**
+That idea became four cooperating projects — a **language** for dashboards, the **firmware**
 that draws them, a **manager plugin** that flashes and configures every display on the boat
-from the SignalK console, a **physics simulator** that feeds the whole thing realistic
-Adriatic sailing data so none of it needs a wet boat to develop against, and a **SignalK
-connector** that is the cloud product's entry point for a real boat.
+from the SignalK console, and a **physics simulator** that feeds the whole thing realistic
+Adriatic sailing data so none of it needs a wet boat to develop against.
+
+Then the boat got connected. The **yey.boats navigator** lets you talk to your boat from
+anywhere, from a Raspberry Pi with HATs or from the **YEY box**, a single device that keeps
+working offline.
 
 ---
 
@@ -57,11 +60,11 @@ connector** that is the cloud product's entry point for a real boat.
 | 📐 **[midl](https://github.com/yey-boats/midl)** | **M**arine **I**nstrument **D**efinition **L**anguage — declarative JSON/YAML dashboards, validated against each device's capability manifest. | TypeScript | ![last](https://img.shields.io/github/last-commit/yey-boats/midl?label=) |
 | 🛠️ **[Instruments-manager](https://github.com/yey-boats/instruments-manager)** | SignalK server plugin + webapp to discover, register, configure, and OTA-update every display on the boat. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/instruments-manager?label=) |
 | 🌊 **[simulator](https://github.com/yey-boats/simulator)** | Physics-accurate Adriatic sailing simulator (Beneteau Oceanis 45) with pluggable SignalK / stdout / NMEA sinks. | Python | ![last](https://img.shields.io/github/last-commit/yey-boats/simulator?label=) |
-| 🔌 **[signalk-yey-connector](https://github.com/yey-boats/signalk-yey-connector)** | SignalK plugin: plan-driven, outbound-only uplink from a real boat to yey.boats — the cloud product's entry point. | JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/signalk-yey-connector?label=) |
+| 🔗 **[signalk-yey-connector](https://github.com/yey-boats/signalk-yey-connector)** | SignalK plugin that links a boat to yey.boats: share what you choose, outbound only. | Node.js / JavaScript | ![last](https://img.shields.io/github/last-commit/yey-boats/signalk-yey-connector?label=) |
 
-> `navigator` (private, a Telegram demo bot, formerly named `navigator-tg-bot`) and `.github`
-> (this repo, org infra) are two more repos in scope for org automation — see the triage
-> playbook — but are excluded from the public roster above.
+Private for now: the **navigator** (the yey.boats cloud bot), **board-imx95** (the YEY box
+image), **local-llm** (the on-board model), and the open-data **locality** and **nautical
+terms** packs the navigator draws on.
 
 ---
 
@@ -86,28 +89,19 @@ protocol (SignalK) and one dashboard format (MIDL).
 
 ---
 
-## How the pieces fit
+## What you get
 
-```
-        author a dashboard                  develop without a boat
-        ┌──────────────┐                    ┌──────────────┐
-        │     MIDL     │                    │  simulator   │  Oceanis 45 physics
-        │  (the lang)  │                    │ (fake telem) │  → SignalK frames
-        └──────┬───────┘                    └──────┬───────┘
-               │ validate vs device                │
-               │ capability manifest               ▼
-               ▼                            ┌──────────────┐
-        ┌──────────────┐   register / OTA   │   SignalK    │
-        │   manager    │◀──────────────────▶│    server    │
-        │ (SK plugin)  │   push layout      └──────┬───────┘
-        └──────┬───────┘                           │ WebSocket
-               │ config + firmware                 ▼
-               ▼                            ┌──────────────┐
-        ┌────────────────────────────────────────────────┐
-        │            instruments  (ESP32-S3 firmware)     │
-        │   LVGL glass-cockpit  ◀── live boat state       │
-        └────────────────────────────────────────────────┘
-```
+- **Talk to your boat.** Ask *"how's the battery?"*, *"are we dragging?"* or *"who's that off the bow?"* on Telegram, the web or Claude, and get an answer from live data.
+- **Know when something's wrong.** Anchor drag, bilge, battery, depth and MOB alerts go to your phone and your crew.
+- **Keep it when the signal drops.** With a YEY box, the navigator runs on board on its own model.
+- **Your data stays yours.** You choose what leaves the boat, and nothing on board listens for incoming connections.
+- **$30 displays.** ESP32 panels show any SignalK data, laid out once in MIDL.
+
+## Two ways to run SignalK on board
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg" width="880" alt="Two ways to run SignalK on board. Raspberry Pi + HATs, 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box is 1 device with SignalK, the navigator, a local model and every interface built in. yey.boats: chat, alerts, remote control, fleet management, external AI ready.">
+</p>
 
 ---
 
