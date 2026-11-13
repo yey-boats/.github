@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="880" height="460" role="img" aria-labelledby="t d">
   <title id="t">Two ways to run YEY on board: Raspberry Pi with HATs, or the YEY box (coming soon)</title>
-  <desc id="d">Two ways to run YEY on board. A Raspberry Pi setup uses three or more devices: a Raspberry Pi, a CAN / NMEA 2000 HAT, a GNSS / serial HAT and a power supply. The YEY box, coming soon, is one device with SignalK, the navigator, a local model and all interfaces built in, including an IMU, and is autopilot ready. Either one connects to the boat's equipment and to YEY instruments (any ESP32 screen, round remotes), and to yey.boats: chat, alerts, remote control, fleet management, external AI ready. The box keeps working offline.</desc>
+  <desc id="d">Two ways to run YEY on board. A Raspberry Pi with HATs, or an alternative, uses three or more devices: a Raspberry Pi, a CAN / NMEA 2000 HAT, a GNSS / serial HAT and a power supply. The YEY box, coming soon, is one device with SignalK, the navigator, a local model and all interfaces built in, including an IMU, and is autopilot ready. Either one connects to the boat's equipment and to YEY instruments (any ESP32 screen, round remotes), and to yey.boats: chat, alerts, remote control, fleet management, external AI ready. The box keeps working offline.</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; }
     .bar   { fill: #f6f8fa; stroke: #d0d7de; }
@@ -51,7 +51,7 @@
 
   <!-- left: raspberry pi + hats -->
   <rect class="panel" x="40" y="104" width="380" height="208" rx="10"/>
-  <text class="count" x="60" y="132">Raspberry Pi + HATs</text>
+  <text class="count" x="60" y="132">Raspberry Pi + HATs <tspan class="sub" font-weight="400">or alternative</tspan></text>
   <text class="sub" x="400" y="132" text-anchor="end">3+ devices</text>
   <rect class="dev" x="80" y="148" width="300" height="32" rx="6"/>
   <text class="lbl" x="230" y="169" text-anchor="middle">CAN / NMEA 2000 HAT</text>
