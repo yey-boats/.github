@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 404" width="880" height="404" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="880" height="460" role="img" aria-labelledby="t d">
   <title id="t">Two ways to run YEY on board: Raspberry Pi with HATs, or the YEY box (coming soon)</title>
-  <desc id="d">Two ways to run YEY on board. A Raspberry Pi setup uses three or more devices: a Raspberry Pi, a CAN / NMEA 2000 HAT, a GNSS / serial HAT and a power supply. The YEY box, coming soon, is one device with SignalK, the navigator, a local model and all interfaces built in, including an IMU, and is autopilot ready. Both connect boat equipment to yey.boats: chat, alerts, remote control, fleet management, external AI ready. The box keeps working offline.</desc>
+  <desc id="d">Two ways to run YEY on board. A Raspberry Pi setup uses three or more devices: a Raspberry Pi, a CAN / NMEA 2000 HAT, a GNSS / serial HAT and a power supply. The YEY box, coming soon, is one device with SignalK, the navigator, a local model and all interfaces built in, including an IMU, and is autopilot ready. Either one connects to the boat's equipment and to YEY instruments (any ESP32 screen, round remotes), and to yey.boats: chat, alerts, remote control, fleet management, external AI ready. The box keeps working offline.</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #1f2328; }
     .bar   { fill: #f6f8fa; stroke: #d0d7de; }
+    .rule  { stroke: #d0d7de; }
     .panel { fill: none; stroke: #d0d7de; stroke-dasharray: 5 4; }
     .dev   { fill: #ffffff; stroke: #8c959f; }
     .pi    { fill: #eaeef2; stroke: #8c959f; }
@@ -14,6 +15,7 @@
     .lbl   { font-size: 14px; }
     .sub   { font-size: 13px; fill: #59636e; }
     .big   { font-size: 18px; font-weight: 700; fill: #0969da; }
+    .key   { font-size: 15px; font-weight: 700; fill: #0969da; }
     .count { font-size: 15px; font-weight: 700; }
     .tip   { fill: #8c959f; }
     .tipa  { fill: #0969da; }
@@ -22,6 +24,7 @@
     @media (prefers-color-scheme: dark) {
       text { fill: #e6edf3; }
       .bar   { fill: #161b22; stroke: #3d444d; }
+      .rule  { stroke: #3d444d; }
       .panel { stroke: #3d444d; }
       .dev   { fill: #0d1117; stroke: #656c76; }
       .pi    { fill: #212830; stroke: #656c76; }
@@ -29,7 +32,7 @@
       .line  { stroke: #656c76; }
       .acc   { stroke: #4493f8; }
       .sub   { fill: #9198a1; }
-      .big   { fill: #4493f8; }
+      .big, .key { fill: #4493f8; }
       .tip   { fill: #656c76; }
       .tipa  { fill: #4493f8; }
       .pill  { fill: #4493f8; }
@@ -37,15 +40,16 @@
     }
   </style>
 
-  <!-- boat equipment -->
-  <rect class="bar" x="40" y="16" width="800" height="48" rx="8"/>
-  <text class="head" x="440" y="45" text-anchor="middle">Boat equipment  ·  NMEA 2000  ·  NMEA 0183  ·  GNSS  ·  sensors</text>
+  <!-- cloud -->
+  <rect class="bar" x="40" y="16" width="800" height="44" rx="8"/>
+  <text class="head" x="440" y="43" text-anchor="middle"><tspan class="big">yey.boats</tspan><tspan dx="16">Chat  ·  Alerts  ·  Remote control  ·  Fleet management  ·  External AI ready</tspan></text>
 
-  <!-- arrows down -->
-  <path class="line" d="M230 64 V92"/><path class="tip" d="M224 90 L230 100 L236 90 Z"/>
-  <path class="line acc" d="M650 64 V92"/><path class="tipa" d="M644 90 L650 100 L656 90 Z"/>
+  <!-- arrows up to cloud -->
+  <path class="line" d="M230 104 V70"/><path class="tip" d="M224 72 L230 62 L236 72 Z"/>
+  <path class="line acc" d="M650 104 V70" stroke-dasharray="4 4"/><path class="tipa" d="M644 72 L650 62 L656 72 Z"/>
+  <text class="sub" x="664" y="88">when online</text>
 
-  <!-- left: today -->
+  <!-- left: raspberry pi + hats -->
   <rect class="panel" x="40" y="104" width="380" height="208" rx="10"/>
   <text class="count" x="60" y="132">Raspberry Pi + HATs</text>
   <text class="sub" x="400" y="132" text-anchor="end">3+ devices</text>
@@ -70,12 +74,15 @@
   <text class="sub" x="650" y="262" text-anchor="middle">CAN  ·  serial  ·  GNSS  ·  IMU  ·  BLE</text>
   <text class="sub" x="650" y="284" text-anchor="middle">LAN  ·  power  ·  autopilot ready</text>
 
-  <!-- arrows down to cloud -->
-  <path class="line" d="M230 312 V340"/><path class="tip" d="M224 338 L230 348 L236 338 Z"/>
-  <path class="line acc" d="M650 312 V340" stroke-dasharray="4 4"/><path class="tipa" d="M644 338 L650 348 L656 338 Z"/>
-  <text class="sub" x="664" y="334">when online</text>
+  <!-- two-way arrows to the boat -->
+  <path class="line" d="M230 322 V342"/>
+  <path class="tip" d="M224 324 L230 314 L236 324 Z"/><path class="tip" d="M224 340 L230 350 L236 340 Z"/>
+  <path class="line acc" d="M650 322 V342"/>
+  <path class="tipa" d="M644 324 L650 314 L656 324 Z"/><path class="tipa" d="M644 340 L650 350 L656 340 Z"/>
 
-  <!-- cloud -->
-  <rect class="bar" x="40" y="352" width="800" height="44" rx="8"/>
-  <text class="head" x="440" y="379" text-anchor="middle"><tspan class="big">yey.boats</tspan><tspan dx="16">Chat  ·  Alerts  ·  Remote control  ·  Fleet management  ·  External AI ready</tspan></text>
+  <!-- on board: equipment + instruments -->
+  <rect class="bar" x="40" y="352" width="800" height="92" rx="8"/>
+  <text class="head" x="440" y="383" text-anchor="middle"><tspan class="key">Boat equipment</tspan><tspan dx="16">NMEA 2000  ·  NMEA 0183  ·  GNSS  ·  sensors  ·  autopilot</tspan></text>
+  <path class="rule" d="M64 398 H816"/>
+  <text class="head" x="440" y="427" text-anchor="middle"><tspan class="key">YEY instruments</tspan><tspan dx="16">any ESP32 screen  ·  round remotes  ·  with a Pi or the YEY box</tspan></text>
 </svg>
