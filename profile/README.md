@@ -47,8 +47,8 @@ from the SignalK console, and a **physics simulator** that feeds the whole thing
 Adriatic sailing data so none of it needs a wet boat to develop against.
 
 Then the boat got connected. The **yey.boats navigator** lets you talk to your boat from
-anywhere, from a Raspberry Pi with HATs or from the **YEY box**, a single device that keeps
-working offline.
+anywhere, from a Raspberry Pi with HATs or from the **YEY box** (coming soon), a single
+device that keeps working offline.
 
 ---
 
@@ -97,10 +97,10 @@ protocol (SignalK) and one dashboard format (MIDL).
 - **Your data stays yours.** You choose what leaves the boat, and nothing on board listens for incoming connections.
 - **$30 displays.** ESP32 panels show any SignalK data, laid out once in MIDL.
 
-## Two ways to run SignalK on board
+## Two ways to run YEY on board
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg" width="880" alt="Two ways to run SignalK on board. Raspberry Pi + HATs, 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box is 1 device with SignalK, the navigator, a local model and every interface built in. yey.boats: chat, alerts, remote control, fleet management, external AI ready.">
+  <img src="https://raw.githubusercontent.com/yey-boats/.github/main/profile/pi-vs-yey.svg?v=2" width="880" alt="Two ways to run YEY on board. Raspberry Pi + HATs, 3+ devices: a Raspberry Pi with a CAN/NMEA 2000 HAT, a GNSS/serial HAT and a power supply. The YEY box (coming soon) is 1 device with SignalK, the navigator, a local model and every interface built in, including an IMU; autopilot ready. yey.boats: chat, alerts, remote control, fleet management, external AI ready.">
 </p>
 
 ---
